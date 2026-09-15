@@ -74,7 +74,7 @@ def handle_message(event):
     try:
         # 呼叫 Claude API
         response = claude_client.messages.create(
-            model="claude-haiku-4-5-20251001",
+            model="glm-5.2",
             max_tokens=1024,
             messages=[
                 {"role": "user", "content": user_text}
