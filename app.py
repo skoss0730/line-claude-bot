@@ -108,10 +108,19 @@ def handle_message(event):
                 {"role": "user", "content": prompt}
             ],
         )
-        reply_text = response.content[0].text
 
+        # 檢查回應是否有效
+        if response.content and len(response.content) > 0:
+            reply_text = response.content[0].text
+        else:
+            print(f"API 回應為空，完整回應: {response}")
+            reply_text = "抱歉，API 沒有回傳有效內容，請稍後再試。"
+
+    except anthropic.APIError as e:
+        print(f"Anthropic API 錯誤: {e.status_code} - {e.message}")
+        reply_text = f"API 錯誤 ({e.status_code}): {e.message}"
     except Exception as e:
-        print(f"API error: {e}")
+        print(f"API error: {type(e).__name__}: {e}")
         reply_text = f"抱歉，處理訊息時發生錯誤：{str(e)}"
 
     # 回覆 LINE
