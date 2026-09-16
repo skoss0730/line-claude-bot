@@ -1,0 +1,23 @@
+# 環境變數（含敏感資訊）
+.env
+.env.local
+
+# 含敏感資訊的暫存檔
+新增 文字文件.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# 系統檔案
+.DS_Store
+Thumbs.db
