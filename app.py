@@ -1,18 +1,8 @@
 """
 LINE Claude Bot — Webhook 伺服器
-<<<<<<< HEAD
 接收 LINE 訊息 → 搜尋網路 → 呼叫 Claude API → 回覆使用者
 """
 import os
-=======
-接收 LINE 訊息 → 呼叫 Claude API → 回覆使用者
-"""
-import os
-import json
-import hashlib
-import hmac
-import base64
->>>>>>> 081e1c4a13651547825e0b59c6d3ad3fee52e45a
 from http import HTTPStatus
 from flask import Flask, request, abort
 from linebot.v3 import WebhookHandler
@@ -22,10 +12,7 @@ from linebot.v3.messaging import (
 )
 from linebot.v3.webhooks import MessageEvent, TextMessageContent
 import anthropic
-<<<<<<< HEAD
 from duckduckgo_search import DDGS
-=======
->>>>>>> 081e1c4a13651547825e0b59c6d3ad3fee52e45a
 
 # ─── 環境變數 ─────────────────────────────────────────────
 CHANNEL_SECRET = os.environ["CHANNEL_SECRET"]
@@ -72,7 +59,6 @@ def callback():
     return "OK", HTTPStatus.OK
 
 
-<<<<<<< HEAD
 # ─── 搜尋函式 ─────────────────────────────────────────────
 def search_web(query, max_results=3):
     """使用 DuckDuckGo 搜尋網路"""
@@ -80,7 +66,6 @@ def search_web(query, max_results=3):
         with DDGS() as ddgs:
             results = list(ddgs.text(query, max_results=max_results))
             if results:
-                # 組合搜尋結果
                 search_text = "搜尋結果：\n\n"
                 for i, r in enumerate(results, 1):
                     search_text += f"{i}. {r['title']}\n{r['body']}\n來源: {r['href']}\n\n"
@@ -101,51 +86,32 @@ def should_search(text):
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     """收到文字訊息時，搜尋網路、呼叫 Claude 並回覆"""
-=======
-# ─── 訊息處理 ─────────────────────────────────────────────
-@handler.add(MessageEvent, message=TextMessageContent)
-def handle_message(event):
-    """收到文字訊息時，呼叫 Claude 並回覆"""
->>>>>>> 081e1c4a13651547825e0b59c6d3ad3fee52e45a
     user_text = event.message.text
     reply_token = event.reply_token
 
     print(f"收到訊息: {user_text}")
 
     try:
-<<<<<<< HEAD
         # 判斷是否需要搜尋
         if should_search(user_text):
             print(f"觸發網路搜尋: {user_text}")
             search_results = search_web(user_text)
-            # 將搜尋結果附帶給 Claude
             prompt = f"用戶問題：{user_text}\n\n網路搜尋結果：\n{search_results}\n\n請根據以上搜尋結果回答用戶的問題。如果搜尋結果不夠，可以用你自己的知識補充。"
         else:
             prompt = user_text
 
         # 呼叫 Claude API（透過第三方代理）
-=======
-        # 呼叫 Claude API
->>>>>>> 081e1c4a13651547825e0b59c6d3ad3fee52e45a
         response = claude_client.messages.create(
             model="glm-5.2",
             max_tokens=1024,
             messages=[
-<<<<<<< HEAD
                 {"role": "user", "content": prompt}
-=======
-                {"role": "user", "content": user_text}
->>>>>>> 081e1c4a13651547825e0b59c6d3ad3fee52e45a
             ],
         )
         reply_text = response.content[0].text
 
     except Exception as e:
-<<<<<<< HEAD
         print(f"API error: {e}")
-=======
-        print(f"Claude API error: {e}")
->>>>>>> 081e1c4a13651547825e0b59c6d3ad3fee52e45a
         reply_text = f"抱歉，處理訊息時發生錯誤：{str(e)}"
 
     # 回覆 LINE
